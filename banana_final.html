@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Saba Banana Counter</title>
+<title>Saba Banana Counter - YOLO Detection</title>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
 <style>
@@ -28,7 +28,10 @@ header{
 .logo{width:38px;height:38px;background:linear-gradient(135deg,var(--gold),var(--amber));border-radius:10px;display:grid;place-items:center;font-size:18px;flex-shrink:0}
 .htxt{flex:1;min-width:0}
 .htxt h1{font-family:'Playfair Display',serif;font-size:clamp(0.8rem,3.5vw,1.15rem);color:var(--cream);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.htxt p{font-size:0.65rem;color:var(--tan);margin-top:1px;display:none}
+.htxt p{font-size:0.65rem;color:var(--tan);margin-top:1px}
+.server-status{font-size:0.65rem;padding:4px 8px;border-radius:6px;display:flex;align-items:center;gap:4px;margin-left:auto}
+.server-status.connected{background:rgba(90,158,96,0.2);color:var(--green)}
+.server-status.disconnected{background:rgba(184,50,50,0.2);color:#b83232}
 nav{display:flex;gap:5px;flex-wrap:nowrap}
 .nb{background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.14);color:var(--tan);padding:7px 10px;border-radius:7px;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:0.75rem;font-weight:600;transition:var(--tr);white-space:nowrap;-webkit-tap-highlight-color:transparent}
 .nb:hover,.nb.active{background:var(--gold);border-color:var(--gold);color:var(--dark)}
@@ -169,6 +172,7 @@ tbody td{padding:8px 11px}
   .htxt p{display:block}
   .hero{padding:28px 26px}
   .hero::after{font-size:110px}
+  .server-status{display:flex}
   #toast{left:auto;max-width:280px;text-align:left}
 }
 
@@ -188,68 +192,44 @@ tbody td{padding:8px 11px}
   .card{border-radius:16px}
   .btn{padding:9px 16px}
   .bfull{padding:14px;font-size:0.92rem}
+  .server-status{display:flex}
 }
 
 /* ── MOBILE: max 600px ── */
 @media(max-width:600px){
-  /* Header — compress */
   header{padding:10px 12px;gap:8px}
   .logo{width:34px;height:34px;font-size:16px;border-radius:9px}
   .htxt h1{font-size:0.82rem}
+  .htxt p{display:none}
+  .server-status{display:none}
   .nb{padding:6px 9px;font-size:0.72rem}
-
-  /* Main padding */
   main{padding:12px 10px}
-
-  /* Hero */
   .hero{padding:18px 16px;border-radius:14px;margin-bottom:16px}
   .hero::after{font-size:70px}
   .hero h2{font-size:1.1rem}
   .hero p{font-size:0.78rem;max-width:100%}
-
-  /* All 2-col grids → single column */
   .g2,.rg,.rt-layout{grid-template-columns:1fr;gap:12px}
-
-  /* Cards */
   .cbd{padding:12px}
   .chd{padding:10px 12px}
-
-  /* Buttons — bigger tap targets */
   .btn{padding:10px 12px;font-size:0.84rem;border-radius:9px}
   .bfull{padding:14px;font-size:0.9rem;margin-top:10px}
   .vcontrols .btn{padding:13px 8px;font-size:0.88rem}
-
-  /* Stats: 2 col on mobile */
   .dstat{grid-template-columns:1fr 1fr;gap:9px}
   .dsv{font-size:1.3rem}
   .dsl{font-size:0.63rem}
   .dsi{width:34px;height:34px;font-size:1rem}
   .ds{padding:11px 9px;gap:8px}
-
-  /* Result stat cards */
   .scard .v{font-size:1.5rem}
-
-  /* Table — hide less important columns */
-  thead th:nth-child(4),tbody td:nth-child(4),
-  thead th:nth-child(5),tbody td:nth-child(5){display:none}
+  thead th:nth-child(4),tbody td:nth-child(4),thead th:nth-child(5),tbody td:nth-child(5){display:none}
   tbody td{padding:8px 8px;font-size:0.76rem}
   thead th{padding:8px 8px;font-size:0.68rem}
-
-  /* Live metrics: bigger font */
   .rmv{font-size:1.8rem}
   .rmet{padding:12px 8px}
-
-  /* Section title */
   .stitle{font-size:0.98rem}
-
-  /* Toast full-width bottom */
   #toast{bottom:12px;right:10px;left:10px;font-size:0.8rem;padding:10px 14px}
-
-  /* Snap thumbs smaller */
   .snth{width:50px;height:38px}
 }
 
-/* ── VERY SMALL: max 380px ── */
 @media(max-width:380px){
   .nb{padding:5px 7px;font-size:0.68rem}
   .htxt h1{font-size:0.75rem}
@@ -261,14 +241,18 @@ tbody td{padding:8px 11px}
 </style>
 </head>
 <body>
-<div id="lov"><div class="spin"></div><p>Analyzing…</p></div>
+<div id="lov"><div class="spin"></div><p id="lov-text">Analyzing…</p></div>
 <div id="toast"></div>
 
 <header>
   <div class="logo">🍌</div>
   <div class="htxt">
-    <h1>Saba Banana Bunch Counter</h1>
-    <p>AI-powered · Runs in your browser</p>
+    <h1>Saba Banana Counter</h1>
+    <p>YOLO AI · Real-time Detection</p>
+  </div>
+  <div class="server-status" id="server-status">
+    <span class="dot" id="status-dot" style="background:#b83232"></span>
+    <span id="status-text">Offline</span>
   </div>
   <nav>
     <button class="nb active" onclick="goPage('analyze',this)">📷 Analyze</button>
@@ -282,9 +266,9 @@ tbody td{padding:8px 11px}
 <main>
   <div class="hero" style="background:linear-gradient(135deg,#3a7d44,#2d6234,#1e4a26)">
     <h2>Banana Bunch Analyzer</h2>
-    <p>Mag-upload o kumuha ng litrato ng Saba banana bunch para awtomatikong mabilang ang hands at matantya ang timbang.</p>
+    <p>Mag-upload o kumuha ng litrato ng Saba banana bunch para sa YOLO-powered detection ng banana counts at weight estimation.</p>
     <div class="pill" style="background:rgba(58,125,68,0.3);color:#a8e6b0">
-      <span class="dot" style="background:#5a9e60"></span>Works offline · Walang server
+      <span class="dot" style="background:#5a9e60"></span>AI-Powered · Python Backend
     </div>
   </div>
   <h3 class="stitle">📷 Image Input</h3>
@@ -327,19 +311,21 @@ tbody td{padding:8px 11px}
     <div class="rg">
       <div class="card">
         <div class="chd"><span>🖼️</span><h3>Processed Image</h3><span id="res-date" style="margin-left:auto;font-size:0.68rem;color:#aaa"></span></div>
-        <div class="cbd" style="padding:11px"><canvas id="res-canvas" style="width:100%;display:block;border-radius:8px"></canvas></div>
+        <div class="cbd" style="padding:11px">
+          <img id="res-img" style="width:100%;display:block;border-radius:8px;max-height:400px;object-fit:contain"/>
+        </div>
       </div>
       <div class="card">
         <div class="chd"><span>📈</span><h3>Summary</h3></div>
         <div class="cbd">
           <div class="sc">
-            <div class="scard"><div class="v" id="r-hands">—</div><div class="u">hands</div><div class="l">Detected</div></div>
+            <div class="scard"><div class="v" id="r-pieces">—</div><div class="u">pieces</div><div class="l">Total</div></div>
             <div class="scard"><div class="v" id="r-weight">—</div><div class="u">kg</div><div class="l">Est. Weight</div></div>
             <div class="cbw">
               <div class="cl"><span>Confidence</span><span id="r-conf-pct">0%</span></div>
               <div class="cb"><div class="cf" id="r-cf"></div></div>
             </div>
-            <div class="fbox">Weight = Hands × 2.5 kg<br><span id="r-formula" style="color:var(--gold)">— × 2.5 = — kg</span></div>
+            <div class="fbox">Weight = Total Pieces × 2.5 kg<br><span id="r-formula" style="color:var(--gold)">— × 2.5 = — kg</span></div>
           </div>
         </div>
       </div>
@@ -353,7 +339,7 @@ tbody td{padding:8px 11px}
 <main>
   <div class="hero" style="background:linear-gradient(135deg,#0d1117,#1a1f2e,#0d2040)">
     <h2>🔴 Live Detection</h2>
-    <p>I-point ang camera sa banana bunch — may lalabas na bounding boxes at live count ng hands at kilo.</p>
+    <p>Real-time banana detection using YOLO. Point your camera at banana bunches for live counting.</p>
     <div class="pill" style="background:rgba(50,230,100,0.15);color:#80ffaa">
       <span class="dot" id="live-pdot" style="background:#32e664"></span>
       <span id="live-ptxt">Ready</span>
@@ -361,7 +347,6 @@ tbody td{padding:8px 11px}
   </div>
 
   <div class="rt-layout">
-    <!-- Video + overlay -->
     <div>
       <div class="vid-wrap">
         <video id="live-vid" autoplay playsinline muted></video>
@@ -371,7 +356,6 @@ tbody td{padding:8px 11px}
           <span class="vstxt" id="vstxt">OFFLINE</span>
         </div>
         <div class="vfps" id="vfps">— fps</div>
-        <!-- idle screen -->
         <div class="vmsg" id="vmsg">
           <div style="font-size:3.5rem;margin-bottom:12px">🍌</div>
           <div style="color:#fff;font-weight:700;font-size:1.05rem;margin-bottom:6px">I-tap ang ▶ Start</div>
@@ -385,11 +369,10 @@ tbody td{padding:8px 11px}
       </div>
     </div>
 
-    <!-- Metrics -->
     <div>
       <h3 class="stitle">📊 Live Results</h3>
       <div class="rtm">
-        <div class="rmet"><div class="rmv" id="lv-hands">—</div><div class="rmu">hands</div><div class="rml">Detected</div></div>
+        <div class="rmet"><div class="rmv" id="lv-pieces">—</div><div class="rmu">pieces</div><div class="rml">Total</div></div>
         <div class="rmet"><div class="rmv" id="lv-weight">—</div><div class="rmu">kg</div><div class="rml">Est. Weight</div></div>
         <div class="s2" style="background:var(--white);border:1.5px solid var(--tan);border-radius:10px;padding:12px 15px">
           <div class="cl"><span>Confidence</span><span id="lv-conf-pct">—</span></div>
@@ -403,8 +386,8 @@ tbody td{padding:8px 11px}
         </div>
         <div class="s2">
           <label style="font-size:0.78rem;color:var(--brown);font-weight:600;display:block;margin-bottom:5px">⚡ Detection Speed</label>
-          <input type="range" min="100" max="2000" step="50" value="500" style="width:100%;accent-color:var(--amber)" oninput="setSpeed(+this.value)">
-          <div style="display:flex;justify-content:space-between;font-size:0.69rem;color:#aaa;margin-top:2px"><span>Fast</span><span>Slow</span></div>
+          <input type="range" min="100" max="1000" step="50" value="300" style="width:100%;accent-color:var(--amber)" oninput="setSpeed(+this.value)">
+          <div style="display:flex;justify-content:space-between;font-size:0.69rem;color:#aaa;margin-top:2px"><span>⚡ Faster</span><span>🐢 Slower</span></div>
         </div>
         <div class="s2">
           <div style="font-family:'Playfair Display',serif;font-size:0.86rem;color:var(--brown);margin-bottom:6px">📸 Snapshots</div>
@@ -421,15 +404,14 @@ tbody td{padding:8px 11px}
 <main>
   <div class="hero" style="background:linear-gradient(135deg,#3d2408,#5c3d11,#7a5220)">
     <h2>Dashboard</h2>
-    <p>Lahat ng resulta naka-save sa browser. Mananatili kahit isara ang page.</p>
+    <p>All detection results saved locally in your browser.</p>
   </div>
   <h3 class="stitle">📊 Overview</h3>
   <div class="dstat">
     <div class="ds"><div class="dsi g">📊</div><div><div class="dsv" id="d-tot">0</div><div class="dsl">Total Analyses</div></div></div>
-    <div class="ds"><div class="dsi gr">🍌</div><div><div class="dsv" id="d-avgh">0</div><div class="dsl">Avg Hands</div></div></div>
-    <div class="ds"><div class="dsi b">⚖️</div><div><div class="dsv" id="d-avgw">0</div><div class="dsl">Avg Weight (kg)</div></div></div>
-    <div class="ds"><div class="dsi g">🎯</div><div><div class="dsv" id="d-avgc">0%</div><div class="dsl">Avg Confidence</div></div></div>
-    <div class="ds"><div class="dsi gr">🏆</div><div><div class="dsv" id="d-maxh">0</div><div class="dsl">Max Hands</div></div></div>
+    <div class="ds"><div class="dsi b">🍌</div><div><div class="dsv" id="d-avgp">0</div><div class="dsl">Avg Pieces</div></div></div>
+    <div class="ds"><div class="dsi g">⚖️</div><div><div class="dsv" id="d-avgw">0</div><div class="dsl">Avg Weight (kg)</div></div></div>
+    <div class="ds"><div class="dsi gr">🏆</div><div><div class="dsv" id="d-maxp">0</div><div class="dsl">Max Pieces</div></div></div>
     <div class="ds"><div class="dsi b">💰</div><div><div class="dsv" id="d-maxw">0</div><div class="dsl">Max Weight (kg)</div></div></div>
   </div>
   <div class="mc"><h4>📈 Recent Detections</h4><canvas id="chart" height="80"></canvas></div>
@@ -440,21 +422,79 @@ tbody td{padding:8px 11px}
   </div>
   <div class="tw">
     <table>
-      <thead><tr><th>#</th><th>Hands</th><th>Weight</th><th>Confidence</th><th>Date</th><th></th></tr></thead>
+      <thead><tr><th>#</th><th>Pieces</th><th>Weight</th><th>Confidence</th><th>Date</th><th></th></tr></thead>
       <tbody id="db-tbody"></tbody>
     </table>
   </div>
 </main>
 </div>
 
-<canvas id="hc" style="display:none"></canvas>
-
 <script>
 'use strict';
+
+// ════════════════════════════════════════════════════════════════════════════════════
+// ██                    CONFIGURATION & SETUP                                        ██
+// ════════════════════════════════════════════════════════════════════════════════════
+
+// Use relative URLs so it works on any server
+const API_URL = window.location.origin;  // Works on localhost or any deployed URL
 const AVG_KG = 2.5;
 const DB_KEY = 'banana_v4';
 
-// ── NAV ──
+let serverConnected = false;
+let curImg = null;
+let liveActive = false;
+let liveSpeed = 500;
+let frameCount = 0;
+let snapshots = [];
+
+// ════════════════════════════════════════════════════════════════════════════════════
+// ██                    SERVER STATUS CHECK                                          ██
+// ════════════════════════════════════════════════════════════════════════════════════
+
+async function checkServerStatus() {
+  try {
+    const res = await fetch(`${API_URL}/health`, { method: 'GET' });
+    if (res.ok) {
+      serverConnected = true;
+      updateStatusUI(true);
+      console.log('✓ Connected to backend');
+      return true;
+    }
+  } catch (e) {
+    serverConnected = false;
+    updateStatusUI(false);
+  }
+  return false;
+}
+
+function updateStatusUI(connected) {
+  const status = document.getElementById('server-status');
+  const dot = document.getElementById('status-dot');
+  const text = document.getElementById('status-text');
+  
+  if (connected) {
+    dot.style.background = '#5a9e60';
+    text.textContent = 'Connected';
+    status.className = 'server-status connected';
+  } else {
+    dot.style.background = '#b83232';
+    text.textContent = 'Offline';
+    status.className = 'server-status disconnected';
+  }
+}
+
+// Check server on load
+window.addEventListener('load', () => {
+  checkServerStatus();
+  setInterval(checkServerStatus, 5000);  // Check every 5 seconds
+  loadDash();
+});
+
+// ════════════════════════════════════════════════════════════════════════════════════
+// ██                    NAVIGATION & UI                                              ██
+// ════════════════════════════════════════════════════════════════════════════════════
+
 function goPage(n, b) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   document.querySelectorAll('.nb').forEach(x => x.classList.remove('active'));
@@ -463,26 +503,55 @@ function goPage(n, b) {
   if (n === 'dashboard') loadDash();
 }
 
-// ── TOAST ──
 let _tt;
 function toast(m, t = 'ok') {
   const el = document.getElementById('toast');
-  el.textContent = m; el.className = 'on ' + t;
-  clearTimeout(_tt); _tt = setTimeout(() => el.className = '', 2800);
+  el.textContent = m;
+  el.className = 'on ' + t;
+  clearTimeout(_tt);
+  _tt = setTimeout(() => el.className = '', 2800);
 }
 
-// ── DB ──
-function dbLoad() { try { return JSON.parse(localStorage.getItem(DB_KEY) || '[]'); } catch { return []; } }
-function dbSave(a) { localStorage.setItem(DB_KEY, JSON.stringify(a)); }
-function dbInsert(r) { const a = dbLoad(); r.id = Date.now(); a.unshift(r); dbSave(a); }
-function dbDelete(id) { dbSave(dbLoad().filter(r => r.id !== id)); }
-function dbClear() { localStorage.removeItem(DB_KEY); }
+// ════════════════════════════════════════════════════════════════════════════════════
+// ██                    LOCAL STORAGE (DATABASE)                                     ██
+// ════════════════════════════════════════════════════════════════════════════════════
 
-// ── IMAGE LOAD (Analyze page) ──
-let curImg = null;
+function dbLoad() {
+  try {
+    return JSON.parse(localStorage.getItem(DB_KEY) || '[]');
+  } catch {
+    return [];
+  }
+}
+
+function dbSave(a) {
+  localStorage.setItem(DB_KEY, JSON.stringify(a));
+}
+
+function dbInsert(r) {
+  const a = dbLoad();
+  r.id = Date.now();
+  r.timestamp = new Date().toISOString();
+  a.unshift(r);
+  dbSave(a);
+}
+
+function dbDelete(id) {
+  dbSave(dbLoad().filter(r => r.id !== id));
+}
+
+function dbClear() {
+  localStorage.removeItem(DB_KEY);
+}
+
+// ════════════════════════════════════════════════════════════════════════════════════
+// ██                    IMAGE LOADING (ANALYZE PAGE)                                 ██
+// ════════════════════════════════════════════════════════════════════════════════════
+
 function loadImg(ev, src) {
   const file = ev.target.files[0];
   if (!file) return;
+  
   const rd = new FileReader();
   rd.onload = e => {
     const img = new Image();
@@ -490,13 +559,15 @@ function loadImg(ev, src) {
       curImg = img;
       if (src === 'cam') {
         const p = document.getElementById('cam-prev');
-        p.src = e.target.result; p.style.display = 'block';
+        p.src = e.target.result;
+        p.style.display = 'block';
         document.getElementById('cam-ph').style.display = 'none';
       } else {
         document.getElementById('up-box').style.display = 'block';
         document.getElementById('up-prev').src = e.target.result;
         const fn = document.getElementById('up-name');
-        fn.textContent = '📄 ' + file.name; fn.style.display = 'block';
+        fn.textContent = '📄 ' + file.name;
+        fn.style.display = 'block';
       }
       document.getElementById('btn-analyze').disabled = false;
       toast('📂 Ready: ' + file.name);
@@ -506,358 +577,355 @@ function loadImg(ev, src) {
   rd.readAsDataURL(file);
   ev.target.value = '';
 }
+
 function dropFile(e) {
   e.preventDefault();
   document.getElementById('uz').classList.remove('dov');
   const f = e.dataTransfer.files[0];
-  if (f) loadImg({ target: { files: [f] } }, 'upload');
+  if (f) loadFile({ target: { files: [f] } }, 'upload');
 }
 
-// ── BANANA COLOR ──
-function isBanana(r, g, b) {
-  const max = Math.max(r, g, b), d = max - Math.min(r, g, b);
-  if (!max) return false;
-  const s = d / max, v = max / 255;
-  if (s < 0.18 || v < 0.18) return false;
-  let h = 0;
-  if (d) {
-    if (max === r) h = ((g - b) / d + 6) % 6;
-    else if (max === g) h = (b - r) / d + 2;
-    else h = (r - g) / d + 4;
-    h *= 60;
-  }
-  return (h >= 38 && h <= 80 && s > 0.22 && v > 0.22) || (h >= 75 && h <= 168 && s > 0.18 && v > 0.18);
-}
+// ════════════════════════════════════════════════════════════════════════════════════
+// ██                    BACKEND DETECTION (ANALYZE)                                  ██
+// ════════════════════════════════════════════════════════════════════════════════════
 
-// ── MORPHOLOGY ──
-function dilate(m, W, H, r) {
-  const o = new Uint8Array(W * H);
-  for (let y = 0; y < H; y++) for (let x = 0; x < W; x++) {
-    if (!m[y*W+x]) continue;
-    for (let dy = -r; dy <= r; dy++) for (let dx = -r; dx <= r; dx++) {
-      const ny = y+dy, nx = x+dx;
-      if (ny>=0&&ny<H&&nx>=0&&nx<W) o[ny*W+nx]=1;
-    }
+async function runAnalyze() {
+  if (!serverConnected) {
+    toast('⚠️ Backend offline. Cannot analyze.', 'er');
+    return;
   }
-  return o;
-}
-function erode(m, W, H, r) {
-  const o = new Uint8Array(W * H);
-  for (let y = 0; y < H; y++) for (let x = 0; x < W; x++) {
-    let ok = true;
-    outer: for (let dy = -r; dy <= r; dy++) for (let dx = -r; dx <= r; dx++) {
-      const ny = y+dy, nx = x+dx;
-      if (ny<0||ny>=H||nx<0||nx>=W||!m[ny*W+nx]) { ok=false; break outer; }
-    }
-    if (ok) o[y*W+x] = 1;
-  }
-  return o;
-}
 
-// ── CONNECTED COMPONENTS ──
-function labelCC(m, W, H) {
-  const L = new Int32Array(W*H); let n = 1;
-  for (let y = 0; y < H; y++) for (let x = 0; x < W; x++) {
-    if (m[y*W+x] && !L[y*W+x]) {
-      const q = [y*W+x]; L[y*W+x] = n;
-      while (q.length) {
-        const i = q.shift(), cy = Math.floor(i/W), cx = i%W;
-        for (const [dy,dx] of [[-1,0],[1,0],[0,-1],[0,1]]) {
-          const ny=cy+dy, nx=cx+dx;
-          if (ny>=0&&ny<H&&nx>=0&&nx<W&&m[ny*W+nx]&&!L[ny*W+nx]) { L[ny*W+nx]=n; q.push(ny*W+nx); }
-        }
-      }
-      n++;
-    }
+  if (!curImg) {
+    toast('📂 No image selected', 'er');
+    return;
   }
-  return L;
-}
-function ccStats(L, W, H) {
-  const s = {};
-  for (let y = 0; y < H; y++) for (let x = 0; x < W; x++) {
-    const l = L[y*W+x]; if (!l) continue;
-    if (!s[l]) s[l] = { px:0, x0:x, x1:x, y0:y, y1:y };
-    const c = s[l]; c.px++;
-    if (x<c.x0)c.x0=x; if (x>c.x1)c.x1=x; if (y<c.y0)c.y0=y; if (y>c.y1)c.y1=y;
-  }
-  return Object.values(s);
-}
 
-// ── CORE DETECT ──
-function detect(src, W, H) {
-  const hc = document.getElementById('hc');
-  hc.width = W; hc.height = H;
-  const ctx = hc.getContext('2d');
-  ctx.drawImage(src, 0, 0, W, H);
-  const d = ctx.getImageData(0, 0, W, H).data;
-  let mask = new Uint8Array(W*H);
-  for (let i = 0; i < d.length; i+=4) if (isBanana(d[i],d[i+1],d[i+2])) mask[i/4]=1;
-  mask = erode(dilate(mask,W,H,10),W,H,10);
-  mask = dilate(erode(mask,W,H,6),W,H,6);
-  const comps = ccStats(labelCC(mask,W,H),W,H).filter(c => {
-    const a=c.px, cw=c.x1-c.x0+1, ch=c.y1-c.y0+1, ar=cw/Math.max(ch,1), tot=W*H;
-    return a>tot*0.003&&a<tot*0.65&&ar>0.2&&ar<6;
-  });
-  let hands=0; const boxes=[];
-  if (comps.length) {
-    comps.sort((a,b)=>b.px-a.px);
-    const tot=comps.reduce((s,c)=>s+c.px,0), avg=tot/comps.length*0.8;
-    for (const c of comps) {
-      const sub=Math.max(1,Math.min(5,Math.round(c.px/Math.max(avg,W*H*0.008))));
-      hands+=sub; boxes.push({x:c.x0,y:c.y0,w:c.x1-c.x0+1,h:c.y1-c.y0+1,sub});
-    }
-    hands=Math.max(3,Math.min(hands,20));
-  }
-  const tb=comps.reduce((s,c)=>s+c.px,0);
-  const conf=comps.length?Math.min(0.95,0.5+(tb/(W*H))*2):0;
-  return { hands, conf, boxes };
-}
-
-function drawBoxes(ctx, W, H, hands, conf, boxes) {
-  const colors=['#00ff80','#00c8ff','#ff6400','#c800ff','#ffc800','#0080ff'];
-  const lw=Math.max(2,W/220), fs=Math.max(12,Math.round(W/55));
-  ctx.lineWidth=lw;
-  boxes.forEach((b,i) => {
-    const c=colors[i%colors.length];
-    ctx.strokeStyle=c; ctx.strokeRect(b.x,b.y,b.w,b.h);
-    ctx.font=`bold ${fs}px sans-serif`; ctx.fillStyle=c;
-    ctx.fillText('Hand'+(b.sub>1?' ×'+b.sub:''),b.x+4,Math.max(b.y-5,fs+2));
-  });
-  const bh=Math.round(H*0.09);
-  ctx.fillStyle='rgba(0,0,0,0.65)'; ctx.fillRect(0,0,W,bh);
-  ctx.font=`bold ${Math.max(12,Math.round(W/50))}px sans-serif`;
-  if (hands>0) {
-    ctx.fillStyle='#32e664';
-    ctx.fillText(`🍌 Hands: ${hands}   Weight: ${(hands*AVG_KG).toFixed(1)} kg   Conf: ${Math.round(conf*100)}%`,10,Math.round(bh*0.72));
-  } else {
-    ctx.fillStyle='#ff9800';
-    ctx.fillText('No banana detected — i-adjust ang camera',10,Math.round(bh*0.72));
-  }
-}
-
-// ── ANALYZE PAGE ──
-function runAnalyze() {
-  if (!curImg) { toast('Load an image first','er'); return; }
+  // Load overlay
   document.getElementById('lov').classList.add('on');
-  document.getElementById('btn-analyze').disabled = true;
-  setTimeout(() => {
-    try {
-      const MAX=800;
-      let W=curImg.naturalWidth, H=curImg.naturalHeight;
-      if (Math.max(W,H)>MAX) { const s=MAX/Math.max(W,H); W=Math.round(W*s); H=Math.round(H*s); }
-      const {hands,conf,boxes} = detect(curImg,W,H);
-      const rc=document.getElementById('res-canvas');
-      rc.width=W; rc.height=H;
-      const rctx=rc.getContext('2d');
-      rctx.drawImage(curImg,0,0,W,H);
-      drawBoxes(rctx,W,H,hands,conf,boxes);
-      const wt=+(hands*AVG_KG).toFixed(2), pct=Math.round(conf*100);
-      dbInsert({banana_hands:hands,estimated_weight:wt,confidence:conf,date_analyzed:new Date().toISOString()});
-      document.getElementById('res-sec').style.display='block';
-      document.getElementById('r-hands').textContent=hands;
-      document.getElementById('r-weight').textContent=wt;
-      document.getElementById('r-conf-pct').textContent=pct+'%';
-      setTimeout(()=>document.getElementById('r-cf').style.width=pct+'%',80);
-      document.getElementById('r-formula').textContent=`${hands} × 2.5 = ${wt} kg`;
-      document.getElementById('res-date').textContent=new Date().toLocaleString();
-      document.getElementById('res-sec').scrollIntoView({behavior:'smooth'});
-      toast('✅ Done!');
-    } catch(e) { toast('Error: '+e.message,'er'); }
-    finally { document.getElementById('lov').classList.remove('on'); document.getElementById('btn-analyze').disabled=false; }
-  }, 60);
-}
-
-// ══════════════════════════════════════════
-//  LIVE DETECTION — pure video stream + canvas overlay
-// ══════════════════════════════════════════
-const live = { stream:null, timer:null, fpsTimer:null, active:false, interval:500, count:0, _fps:0 };
-
-function $i(id) { return document.getElementById(id); }
-function liveSetDot(c) { $i('vdot').style.background=c; $i('live-pdot').style.background=c; }
-function liveSetTxt(t)  { $i('vstxt').textContent=t; $i('live-ptxt').textContent=t; }
-function liveSetBtns(on){ $i('btn-start').disabled=on; $i('btn-stop').disabled=!on; $i('btn-snap').disabled=!on; }
-function showIdle(html)  { const m=$i('vmsg'); if(html) m.innerHTML=html; m.className='vmsg'; }
-function hideIdle()      { $i('vmsg').className='vmsg hide'; }
-
-async function liveStart() {
-  $i('btn-start').disabled = true;
-  liveSetDot('#ffc800'); liveSetTxt('Starting…');
-  showIdle('<div style="font-size:2.5rem;margin-bottom:10px;display:inline-block;animation:sp 1s linear infinite">⏳</div><div style="color:#ccc;font-size:0.85rem;margin-top:8px">Bubukas ang camera…</div>');
-
-  if (live.stream) { live.stream.getTracks().forEach(t=>t.stop()); live.stream=null; }
+  document.getElementById('lov-text').textContent = 'Sending to YOLO...';
 
   try {
-    live.stream = await navigator.mediaDevices.getUserMedia({
-      video: { facingMode: { ideal: 'environment' }, width: { ideal: 1280 }, height: { ideal: 720 } },
+    // Convert image to base64
+    const canvas = document.getElementById('hc') || document.createElement('canvas');
+    canvas.width = curImg.naturalWidth;
+    canvas.height = curImg.naturalHeight;
+    const ctx = canvas.getContext('2d');
+    ctx.drawImage(curImg, 0, 0);
+    const base64 = canvas.toDataURL('image/jpeg', 0.85);
+
+    // Send to backend
+    document.getElementById('lov-text').textContent = 'Processing...';
+    const res = await fetch(`${API_URL}/detect`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ image: base64 })
+    });
+
+    if (!res.ok) {
+      throw new Error(`Server error: ${res.status}`);
+    }
+
+    const data = await res.json();
+    if (!data.success) {
+      throw new Error(data.error || 'Detection failed');
+    }
+
+    // Display results
+    displayResults(data);
+    
+    // Save to database
+    dbInsert({
+      pieces: data.count,
+      weight: data.estimated_weight,
+      confidence: data.avg_confidence
+    });
+
+    toast('✓ Analysis complete!', 'ok');
+  } catch (err) {
+    console.error('Analysis error:', err);
+    toast('⚠️ ' + err.message, 'er');
+  } finally {
+    document.getElementById('lov').classList.remove('on');
+  }
+}
+
+function displayResults(data) {
+  // Show results section
+  document.getElementById('res-sec').style.display = 'block';
+
+  // Display output image
+  const resImg = document.getElementById('res-img');
+  resImg.src = 'data:image/jpeg;base64,' + data.output_image;
+
+  // Update stats
+  const pieces = data.count;
+  const weight = data.estimated_weight.toFixed(1);
+  const confidence = (data.avg_confidence * 100).toFixed(1);
+
+  document.getElementById('r-pieces').textContent = pieces;
+  document.getElementById('r-weight').textContent = weight;
+  document.getElementById('r-conf-pct').textContent = confidence + '%';
+  document.getElementById('r-formula').textContent = `${pieces} × 2.5 = ${weight} kg`;
+  
+  // Update confidence bar
+  const cf = document.getElementById('r-cf');
+  cf.style.width = (data.avg_confidence * 100) + '%';
+
+  // Update date
+  const now = new Date();
+  document.getElementById('res-date').textContent = now.toLocaleTimeString();
+}
+
+// ════════════════════════════════════════════════════════════════════════════════════
+// ██                    LIVE CAMERA DETECTION                                        ██
+// ════════════════════════════════════════════════════════════════════════════════════
+
+async function liveStart() {
+  if (!serverConnected) {
+    toast('⚠️ Backend offline', 'er');
+    return;
+  }
+
+  try {
+    const stream = await navigator.mediaDevices.getUserMedia({
+      video: { facingMode: 'environment' },
       audio: false
     });
 
-    const vid = $i('live-vid');
-    vid.srcObject = live.stream;
-    await vid.play();
+    const video = document.getElementById('live-vid');
+    video.srcObject = stream;
 
-    vid.addEventListener('loadedmetadata', () => {
-      $i('live-cvs').width  = vid.videoWidth;
-      $i('live-cvs').height = vid.videoHeight;
-    }, { once: true });
+    // Hide message, show controls
+    document.getElementById('vmsg').classList.add('hide');
+    document.getElementById('btn-start').disabled = true;
+    document.getElementById('btn-stop').disabled = false;
+    document.getElementById('btn-snap').disabled = false;
 
-    hideIdle();
-    live.active=true; live.count=0; live._fps=0;
-    liveSetDot('#32e664'); liveSetTxt('LIVE · Detecting…');
-    liveSetBtns(true); $i('btn-start').disabled=true;
+    // Update status pill
+    document.getElementById('live-pdot').style.background = '#32e664';
+    document.getElementById('live-ptxt').textContent = 'Recording...';
+    document.getElementById('vstxt').textContent = 'LIVE';
+    document.getElementById('vdot').style.background = '#32e664';
 
-    clearInterval(live.timer); clearInterval(live.fpsTimer);
-    live.timer = setInterval(liveFrame, live.interval);
-    live.fpsTimer = setInterval(() => { $i('vfps').textContent=live._fps+' fps'; live._fps=0; }, 1000);
-    toast('🔴 Live detection started!');
+    liveActive = true;
+    frameCount = 0;
 
+    // Start detection loop
+    liveDetectLoop();
+
+    toast('🎥 Live stream started', 'ok');
   } catch (err) {
-    live.active=false; $i('btn-start').disabled=false;
-    liveSetDot('#ff3b3b');
-
-    let msg='', hint='';
-    if (err.name==='NotAllowedError'||err.name==='PermissionDeniedError') {
-      liveSetTxt('BLOCKED');
-      msg  = '🚫 Camera Blocked';
-      hint = 'I-allow ang camera sa browser:<br><br>'
-           + '<b>Chrome Android:</b><br>I-tap ang 🔒 sa address bar → Permissions → Camera → Allow → Reload page<br><br>'
-           + '<b>Chrome Desktop:</b><br>I-click ang 🔒 → Site settings → Camera → Allow → Reload page';
-    } else if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
-      liveSetTxt('NEEDS HTTPS');
-      msg  = '🔐 Kailangan ng HTTPS';
-      hint = 'Hindi gumagana ang live camera sa <b>file://</b>.<br><br>'
-           + 'I-host sa <b>GitHub Pages</b> (libre, HTTPS) o i-run locally:<br>'
-           + '<code style="background:rgba(0,0,0,0.4);padding:2px 7px;border-radius:4px;font-size:0.78rem">python -m http.server 8080</code><br>'
-           + 'tapos buksan: <code style="background:rgba(0,0,0,0.4);padding:2px 7px;border-radius:4px;font-size:0.78rem">http://localhost:8080</code>';
-    } else if (err.name==='NotFoundError') {
-      liveSetTxt('NO CAMERA'); msg='📷 Walang Camera'; hint='Hindi nahanap ang camera sa device mo.';
-    } else if (err.name==='NotReadableError') {
-      liveSetTxt('BUSY'); msg='⚠️ Camera Busy'; hint='Ginagamit ng ibang app ang camera. Isara muna ito.';
-    } else {
-      liveSetTxt('ERROR'); msg='⚠️ '+err.name; hint=err.message;
-    }
-
-    showIdle(`
-      <div style="font-size:2rem;margin-bottom:8px">${msg.split(' ')[0]}</div>
-      <div style="color:#fff;font-weight:700;font-size:0.95rem;margin-bottom:8px">${msg.slice(msg.indexOf(' ')+1)}</div>
-      <div style="background:rgba(255,255,255,0.07);border-radius:9px;padding:12px 15px;text-align:left;font-size:0.74rem;color:#ddd;line-height:1.85;max-width:280px;margin-bottom:12px">${hint}</div>
-      <button class="btn bg" onclick="liveStart()" style="padding:10px 20px">🔄 Subukan ulit</button>
-    `);
-    toast('❌ '+msg.slice(msg.indexOf(' ')+1),'er');
+    console.error('Camera error:', err);
+    toast('⚠️ Camera access denied', 'er');
   }
 }
 
 function liveStop() {
-  live.active=false;
-  clearInterval(live.timer); clearInterval(live.fpsTimer);
-  if (live.stream) { live.stream.getTracks().forEach(t=>t.stop()); live.stream=null; }
-  $i('live-vid').srcObject=null;
-  const cvs=$i('live-cvs');
-  cvs.getContext('2d').clearRect(0,0,cvs.width,cvs.height);
-  liveSetBtns(false); liveSetDot('#555'); liveSetTxt('OFFLINE');
-  $i('vfps').textContent='— fps';
-  showIdle('<div style="font-size:3.5rem;margin-bottom:12px">🍌</div><div style="color:#fff;font-weight:700;font-size:1.05rem;margin-bottom:6px">I-tap ang ▶ Start</div><div style="color:#aaa;font-size:0.8rem">Bubuksan ang camera at magsisimulang mag-detect</div>');
-  toast('Camera stopped');
+  const video = document.getElementById('live-vid');
+  if (video.srcObject) {
+    video.srcObject.getTracks().forEach(t => t.stop());
+  }
+
+  liveActive = false;
+  
+  document.getElementById('vmsg').classList.remove('hide');
+  document.getElementById('btn-start').disabled = false;
+  document.getElementById('btn-stop').disabled = true;
+  document.getElementById('btn-snap').disabled = true;
+  document.getElementById('live-pdot').style.background = '#555';
+  document.getElementById('live-ptxt').textContent = 'Ready';
+  document.getElementById('vstxt').textContent = 'OFFLINE';
+  document.getElementById('vdot').style.background = '#555';
+
+  toast('⏹ Stream stopped', 'ok');
 }
 
-function liveFrame() {
-  if (!live.active) return;
-  const vid=$i('live-vid');
-  if (!vid.videoWidth||vid.readyState<2) return;
-  live._fps++;
-  const W=vid.videoWidth, H=vid.videoHeight;
-  const {hands,conf,boxes}=detect(vid,W,H);
-  const cvs=$i('live-cvs');
-  if (cvs.width!==W) cvs.width=W;
-  if (cvs.height!==H) cvs.height=H;
-  const ctx=cvs.getContext('2d');
-  ctx.clearRect(0,0,W,H);
-  drawBoxes(ctx,W,H,hands,conf,boxes);
-  live.count++;
-  const pct=Math.round(conf*100);
-  const vh=$i('lv-hands'), nv=hands||'—';
-  if (vh.textContent!==String(nv)) { vh.classList.add('pop'); setTimeout(()=>vh.classList.remove('pop'),250); }
-  vh.textContent=nv;
-  $i('lv-weight').textContent   = hands?(hands*AVG_KG).toFixed(1):'—';
-  $i('lv-conf-pct').textContent = hands?pct+'%':'—';
-  $i('lv-cf').style.width       = pct+'%';
-  $i('lv-count').textContent    = live.count;
-  $i('lv-updated').textContent  = new Date().toLocaleTimeString();
+async function liveDetectLoop() {
+  if (!liveActive) return;
+
+  try {
+    const video = document.getElementById('live-vid');
+    const canvas = document.getElementById('live-cvs');
+    const ctx = canvas.getContext('2d');
+
+    // Setup canvas
+    canvas.width = video.videoWidth;
+    canvas.height = video.videoHeight;
+
+    // Draw video frame
+    ctx.drawImage(video, 0, 0);
+
+    // Get base64
+    const base64 = canvas.toDataURL('image/jpeg', 0.75);
+
+    // Send to backend
+    const res = await fetch(`${API_URL}/detect-stream`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ image: base64 })
+    });
+
+    if (res.ok) {
+      const data = await res.json();
+      updateLiveDisplay(data);
+
+      // Draw boxes
+      ctx.strokeStyle = '#00FF00';
+      ctx.lineWidth = 2;
+      ctx.font = '14px Arial';
+      ctx.fillStyle = '#00FF00';
+
+      for (const det of data.detections) {
+        const x1 = det.x1, y1 = det.y1, x2 = det.x2, y2 = det.y2;
+        ctx.strokeRect(x1, y1, x2 - x1, y2 - y1);
+        ctx.fillText(det.conf.toFixed(2), x1, y1 - 5);
+      }
+
+      frameCount++;
+    }
+  } catch (err) {
+    console.error('Live detection error:', err);
+  }
+
+  setTimeout(liveDetectLoop, liveSpeed);
 }
 
-function setSpeed(ms) {
-  live.interval=ms; $i('lv-speed').textContent=ms+'ms';
-  if (live.active) { clearInterval(live.timer); live.timer=setInterval(liveFrame,ms); }
+function updateLiveDisplay(data) {
+  const pieces = data.count;
+  const weight = data.estimated_weight.toFixed(1);
+  const confidence = (data.avg_confidence * 100).toFixed(1);
+
+  document.getElementById('lv-pieces').textContent = pieces;
+  document.getElementById('lv-weight').textContent = weight;
+  document.getElementById('lv-conf-pct').textContent = confidence + '%';
+  document.getElementById('lv-count').textContent = frameCount;
+
+  const cf = document.getElementById('lv-cf');
+  cf.style.width = data.avg_confidence * 100 + '%';
+
+  document.getElementById('lv-updated').textContent = new Date().toLocaleTimeString();
+  document.getElementById('vfps').textContent = Math.round(1000 / liveSpeed) + ' fps';
 }
 
 function liveSnap() {
-  if (!live.active) { toast('Start camera muna','er'); return; }
-  const vid=$i('live-vid');
-  if (!vid.videoWidth) return;
-  const W=vid.videoWidth, H=vid.videoHeight;
-  const sc=document.createElement('canvas'); sc.width=W; sc.height=H;
-  sc.getContext('2d').drawImage(vid,0,0,W,H);
-  sc.getContext('2d').drawImage($i('live-cvs'),0,0);
-  const hands=parseInt($i('lv-hands').textContent)||0;
-  const conf=parseFloat($i('lv-conf-pct').textContent)/100||0;
-  if (!hands) { toast('Walang banana sa frame','er'); return; }
-  dbInsert({banana_hands:hands,estimated_weight:+(hands*AVG_KG).toFixed(2),confidence:conf,date_analyzed:new Date().toISOString()});
-  addThumb(sc);
-  toast(`📸 Saved — ${hands} hands · ${(hands*AVG_KG).toFixed(1)} kg`);
+  const canvas = document.getElementById('live-cvs');
+  snapshots.push(canvas.toDataURL('image/jpeg'));
+
+  const snrow = document.getElementById('sn-row');
+  if (snrow.firstChild.tagName !== 'IMG') {
+    snrow.innerHTML = '';
+  }
+
+  const img = document.createElement('img');
+  img.src = snapshots[snapshots.length - 1];
+  img.className = 'snth';
+  snrow.appendChild(img);
+
+  toast('📸 Snapshot saved', 'ok');
 }
 
-function addThumb(srcCanvas) {
-  const th=document.createElement('canvas'); th.width=60; th.height=44;
-  th.getContext('2d').drawImage(srcCanvas,0,0,60,44);
-  const img=document.createElement('img');
-  img.src=th.toDataURL(); img.className='snth'; img.title='Click to download';
-  img.onclick=()=>{ const a=document.createElement('a'); a.href=srcCanvas.toDataURL('image/jpeg',0.92); a.download='banana_'+Date.now()+'.jpg'; a.click(); };
-  const row=$i('sn-row');
-  if (row.querySelector('span')) row.innerHTML='';
-  row.prepend(img);
+function setSpeed(v) {
+  liveSpeed = v;
+  document.getElementById('lv-speed').textContent = v + 'ms';
 }
 
+// ════════════════════════════════════════════════════════════════════════════════════
+// ██                    DASHBOARD                                                    ██
+// ════════════════════════════════════════════════════════════════════════════════════
 
-
-// ── DASHBOARD ──
-let chartInst=null;
 function loadDash() {
-  const rows=dbLoad(); const n=rows.length;
-  const avg=(fn,d=1)=>n?+(rows.reduce((s,r)=>s+fn(r),0)/n).toFixed(d):0;
-  document.getElementById('d-tot').textContent=n;
-  document.getElementById('d-avgh').textContent=avg(r=>r.banana_hands);
-  document.getElementById('d-avgw').textContent=avg(r=>r.estimated_weight);
-  document.getElementById('d-avgc').textContent=avg(r=>r.confidence*100)+'%';
-  document.getElementById('d-maxh').textContent=n?Math.max(...rows.map(r=>r.banana_hands)):0;
-  document.getElementById('d-maxw').textContent=n?Math.max(...rows.map(r=>r.estimated_weight)):0;
-  renderTable(rows); renderChart(rows);
+  const data = dbLoad();
+
+  if (!data.length) {
+    document.getElementById('d-tot').textContent = '0';
+    document.getElementById('d-avgp').textContent = '0';
+    document.getElementById('d-avgw').textContent = '0';
+    document.getElementById('d-maxp').textContent = '0';
+    document.getElementById('d-maxw').textContent = '0';
+    document.getElementById('db-tbody').innerHTML = '<tr><td colspan="5" class="es">No data yet</td></tr>';
+    if (window.dashChart) window.dashChart.destroy();
+    return;
+  }
+
+  // Stats
+  const tot = data.length;
+  const avgp = (data.reduce((s, r) => s + r.pieces, 0) / tot).toFixed(1);
+  const avgw = (data.reduce((s, r) => s + r.weight, 0) / tot).toFixed(1);
+  const maxp = Math.max(...data.map(r => r.pieces));
+  const maxw = Math.max(...data.map(r => r.weight)).toFixed(1);
+
+  document.getElementById('d-tot').textContent = tot;
+  document.getElementById('d-avgp').textContent = avgp;
+  document.getElementById('d-avgw').textContent = avgw;
+  document.getElementById('d-maxp').textContent = maxp;
+  document.getElementById('d-maxw').textContent = maxw;
+
+  // Table
+  const tbl = document.getElementById('db-tbody');
+  tbl.innerHTML = data.slice(0, 20).map((r, i) => `
+    <tr>
+      <td>${i + 1}</td>
+      <td>${r.pieces}</td>
+      <td>${r.weight.toFixed(1)} kg</td>
+      <td><span class="badge bad">${(r.confidence * 100).toFixed(0)}%</span></td>
+      <td style="font-size:0.7rem;color:#999">${new Date(r.timestamp).toLocaleString()}</td>
+      <td><button class="btn brd" style="padding:3px 8px;font-size:0.7rem" onclick="dbDelete(${r.id});loadDash()">✕</button></td>
+    </tr>
+  `).join('');
+
+  // Chart
+  drawChart(data.slice(0, 20));
 }
-function renderTable(rows) {
-  const tb=document.getElementById('db-tbody');
-  if (!rows.length) { tb.innerHTML='<tr><td colspan="6"><div class="es"><div class="ei">📭</div><p>Wala pang record.</p></div></td></tr>'; return; }
-  tb.innerHTML=rows.map((r,i)=>{
-    const p=Math.round(r.confidence*100), cl=p>=70?'bg2':p>=40?'bad':'ber';
-    return `<tr><td style="color:#aaa;font-family:'DM Mono',monospace">${i+1}</td><td><strong>${r.banana_hands}</strong> hands</td><td><strong>${r.estimated_weight}</strong> kg</td><td><span class="badge ${cl}">${p}%</span></td><td style="font-size:0.74rem;color:#888">${new Date(r.date_analyzed).toLocaleString()}</td><td><button class="btn brd" onclick="delRow(${r.id})">🗑</button></td></tr>`;
-  }).join('');
-}
-function renderChart(rows) {
-  const last=[...rows].reverse().slice(-20);
-  if (chartInst) chartInst.destroy();
-  chartInst=new Chart(document.getElementById('chart'),{
-    type:'bar',
-    data:{labels:last.map((_,i)=>'#'+(i+1)),datasets:[
-      {label:'Hands',data:last.map(r=>r.banana_hands),backgroundColor:'rgba(200,150,12,0.7)',borderColor:'rgba(200,150,12,1)',borderWidth:2,borderRadius:5,yAxisID:'y'},
-      {label:'Weight (kg)',data:last.map(r=>r.estimated_weight),type:'line',borderColor:'#3a7d44',backgroundColor:'rgba(58,125,68,0.1)',borderWidth:2.5,pointRadius:4,fill:true,tension:0.4,yAxisID:'y1'}
-    ]},
-    options:{responsive:true,interaction:{mode:'index',intersect:false},plugins:{legend:{position:'top'}},
-      scales:{y:{position:'left',title:{display:true,text:'Hands'}},y1:{position:'right',title:{display:true,text:'Weight (kg)'},grid:{drawOnChartArea:false}}}}
+
+function drawChart(data) {
+  const canvas = document.getElementById('chart');
+  if (!canvas) return;
+
+  if (window.dashChart) window.dashChart.destroy();
+
+  window.dashChart = new Chart(canvas, {
+    type: 'line',
+    data: {
+      labels: data.map((_, i) => i + 1).reverse(),
+      datasets: [
+        {
+          label: 'Pieces',
+          data: data.map(r => r.pieces || r.hands || 1).reverse(),
+          borderColor: '#5a9e60',
+          backgroundColor: 'rgba(90,158,96,0.1)',
+          tension: 0.4,
+          yAxisID: 'y'
+        },
+        {
+          label: 'Weight (kg)',
+          data: data.map(r => r.weight).reverse(),
+          borderColor: '#d4820a',
+          backgroundColor: 'rgba(212,130,10,0.1)',
+          tension: 0.4,
+          yAxisID: 'y1'
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      interaction: { mode: 'index', intersect: false },
+      plugins: { legend: { display: true, position: 'top' } },
+      scales: {
+        y: { type: 'linear', display: true, position: 'left', ticks: { color: '#5a9e60' } },
+        y1: { type: 'linear', display: true, position: 'right', ticks: { color: '#d4820a' }, grid: { display: false } }
+      }
+    }
   });
 }
-function delRow(id) { if (!confirm('Delete?')) return; dbDelete(id); loadDash(); toast('Deleted'); }
-function clearAll() { if (!confirm('Clear ALL history?')) return; dbClear(); loadDash(); toast('Cleared'); }
 
-// Init
-window.addEventListener('DOMContentLoaded', loadDash);
+function clearAll() {
+  if (confirm('🗑 Clear all data? This cannot be undone.')) {
+    dbClear();
+    loadDash();
+    toast('✓ All data cleared', 'ok');
+  }
+}
 </script>
 </body>
 </html>
